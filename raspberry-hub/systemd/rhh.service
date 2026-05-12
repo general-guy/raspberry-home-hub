@@ -1,0 +1,14 @@
+[Unit]
+Description=Raspberry Home Hub
+After=network.target
+
+[Service]
+Type=simple
+User=geraldo-server
+WorkingDirectory=/opt/rhh/raspberry-hub
+ExecStart=/opt/rhh/raspberry-hub/.venv/bin/python app/main.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
