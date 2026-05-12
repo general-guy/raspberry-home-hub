@@ -931,21 +931,16 @@ raspberry-home-hub/
 
 ---
 
-# Convenção para Arquivos Flat
+# Estrutura do Repositório
 
-Como "Fontes do Projeto" utiliza estrutura flat, os arquivos devem preservar contexto estrutural usando:
+O projeto utiliza estrutura hierárquica real de diretórios.
 
-```text
-modulo__arquivo.ext
-```
-
-Exemplos:
+Exemplo:
 
 ```text
-esp32-node__fsm.md
-raspberry-hub__runtime.md
-shared-contracts__events.md
-```
+shared-contracts/events.md
+esp32-node/fsm.md
+raspberry-hub/runtime.md
 
 ---
 
