@@ -21,7 +21,7 @@ class MQTTClient:
             f"rhh/{self.node_id}/heartbeat"
         )
 
-        self.test_topic = "rhh/test"
+        self.command_topic = "rhh/hub/commands"
 
         self.client = mqtt.Client(
             client_id=self.node_id,
@@ -64,9 +64,9 @@ class MQTTClient:
 
             log("MQTT connected")
 
-            self.client.subscribe(self.test_topic)
+            self.client.subscribe(self.command_topic)
 
-            log(f"Subscribed to {self.test_topic}")
+            log(f"Subscribed to {self.command_topic}")
 
             self.publish_availability_online()
 
