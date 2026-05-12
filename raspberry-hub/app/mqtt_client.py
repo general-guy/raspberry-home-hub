@@ -21,6 +21,8 @@ class MQTTClient:
             f"rhh/{self.node_id}/heartbeat"
         )
 
+        self.test_topic = "rhh/test"
+
         self.client = mqtt.Client(
             client_id=self.node_id,
             clean_session=True
@@ -41,6 +43,7 @@ class MQTTClient:
 
         self.client.on_connect = self.on_connect
         self.client.on_disconnect = self.on_disconnect
+        self.client.on_message = self.on_message
 
         self.connected = False
 
@@ -61,6 +64,10 @@ class MQTTClient:
 
             log("MQTT connected")
 
+            self.client.subscribe(self.test_topic)
+
+            log(f"Subscribed to {self.test_topic}")
+
             self.publish_availability_online()
 
         else:
@@ -73,6 +80,16 @@ class MQTTClient:
             log("MQTT unexpectedly disconnected")
         else:
             log("MQTT disconnected")
+
+    def on_message(self, client, userdata, message):
+        topic = message.topic
+        payload = message.payload.decode()
+
+        log("MQTT message received")
+
+        log(f"Topic: {topic}")
+
+        log(f"Payload: {payload}")
 
     def publish_availability_online(self):
         payload = {
