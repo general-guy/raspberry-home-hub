@@ -2,7 +2,7 @@
   "nodeId": "raspberry-home-hub",
   "heartbeatIntervalSeconds": 5,
   "mqtt": {
-    "host": "192.168.68.210",
+"host": "localhost"
     "port": 1883
   }
 }
