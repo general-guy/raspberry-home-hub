@@ -1,0 +1,28 @@
+# PlatformIO
+.pio/
+
+# VSCode
+.vscode/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+*.log
+
+# Runtime / databases
+data/
+*.db
+
+# Environment files
+.env
+
+# Repomix
+repomix-output.xml
+*.xml
+
+# Ferramentas pessoais
+.0.npx.bat
