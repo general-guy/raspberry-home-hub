@@ -20,16 +20,22 @@ def main():
 
     mqtt_client = MQTTClient(config)
 
-    mqtt_client.connect()
+    try:
+        mqtt_client.connect()
 
-    heartbeat_loop(
-        mqtt_client=mqtt_client,
-        interval_seconds=config["heartbeatIntervalSeconds"]
-    )
+        heartbeat_loop(
+            mqtt_client=mqtt_client,
+            interval_seconds=config["heartbeatIntervalSeconds"]
+        )
+
+    except KeyboardInterrupt:
+        log("Keyboard interrupt received")
+
+    finally:
+        mqtt_client.disconnect()
+
+        log("Raspberry Home Hub stopped")
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        log("Raspberry Home Hub stopped")
+    main()

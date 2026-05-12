@@ -13,9 +13,30 @@ class MQTTClient:
         self.host = config["mqtt"]["host"]
         self.port = config["mqtt"]["port"]
 
+        self.availability_topic = (
+            f"rhh/{self.node_id}/availability"
+        )
+
+        self.heartbeat_topic = (
+            f"rhh/{self.node_id}/heartbeat"
+        )
+
         self.client = mqtt.Client(
             client_id=self.node_id,
             clean_session=True
+        )
+
+        offline_payload = {
+            "nodeId": self.node_id,
+            "status": "offline",
+            "timestamp": int(time.time())
+        }
+
+        self.client.will_set(
+            topic=self.availability_topic,
+            payload=json.dumps(offline_payload),
+            qos=1,
+            retain=True
         )
 
         self.client.on_connect = self.on_connect
@@ -37,7 +58,11 @@ class MQTTClient:
     def on_connect(self, client, userdata, flags, rc):
         if rc == 0:
             self.connected = True
+
             log("MQTT connected")
+
+            self.publish_availability_online()
+
         else:
             log(f"MQTT connection failed with rc={rc}")
 
@@ -49,12 +74,38 @@ class MQTTClient:
         else:
             log("MQTT disconnected")
 
+    def publish_availability_online(self):
+        payload = {
+            "nodeId": self.node_id,
+            "status": "online",
+            "timestamp": int(time.time())
+        }
+
+        result = self.client.publish(
+            topic=self.availability_topic,
+            payload=json.dumps(payload),
+            qos=1,
+            retain=True
+        )
+
+        if result.rc == mqtt.MQTT_ERR_SUCCESS:
+            log(
+                f"Availability published to "
+                f"{self.availability_topic}"
+            )
+        else:
+            log(
+                f"Failed to publish availability to "
+                f"{self.availability_topic}"
+            )
+
     def publish_heartbeat(self):
         if not self.connected:
-            log("Skipping heartbeat publish: MQTT not connected")
+            log(
+                "Skipping heartbeat publish: "
+                "MQTT not connected"
+            )
             return
-
-        topic = f"rhh/{self.node_id}/heartbeat"
 
         payload = {
             "nodeId": self.node_id,
@@ -63,18 +114,38 @@ class MQTTClient:
         }
 
         result = self.client.publish(
-            topic=topic,
+            topic=self.heartbeat_topic,
             payload=json.dumps(payload),
-            qos=1
+            qos=1,
+            retain=False
         )
 
         if result.rc == mqtt.MQTT_ERR_SUCCESS:
-            log(f"Heartbeat published to {topic}")
+            log(
+                f"Heartbeat published to "
+                f"{self.heartbeat_topic}"
+            )
         else:
-            log(f"Failed to publish heartbeat to {topic}")
+            log(
+                f"Failed to publish heartbeat to "
+                f"{self.heartbeat_topic}"
+            )
 
     def disconnect(self):
         log("Disconnecting MQTT client")
+
+        offline_payload = {
+            "nodeId": self.node_id,
+            "status": "offline",
+            "timestamp": int(time.time())
+        }
+
+        self.client.publish(
+            topic=self.availability_topic,
+            payload=json.dumps(offline_payload),
+            qos=1,
+            retain=True
+        )
 
         self.client.loop_stop()
         self.client.disconnect()
