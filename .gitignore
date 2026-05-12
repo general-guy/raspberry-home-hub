@@ -6,8 +6,11 @@
 
 # Python
 venv/
+.venv/
 __pycache__/
 *.pyc
+.pytest_cache/
+.mypy_cache/
 
 # Logs
 logs/
@@ -22,7 +25,11 @@ data/
 
 # Repomix
 repomix-output.xml
-*.xml
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
 
 # Ferramentas pessoais
 .0.npx.bat
