@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=geraldo-server
 WorkingDirectory=/opt/rhh/raspberry-hub
-ExecStart=/opt/rhh/raspberry-hub/.venv/bin/python app/main.py
+ExecStart=/opt/rhh/raspberry-hub/.venv/bin/python -u app/main.py
 Restart=always
 RestartSec=5
 
