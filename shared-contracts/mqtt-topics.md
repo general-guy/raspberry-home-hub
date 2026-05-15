@@ -1,6 +1,6 @@
 \# MQTT Topics
 
-\# shared-contracts\_\_mqtt-topics.md
+\# mqtt-topics.md
 
 
 

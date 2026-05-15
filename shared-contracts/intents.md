@@ -1,5 +1,5 @@
 # Intents Contract
-# shared-contracts__intents.md
+# intents.md
 
 Versão: 1.0
 Status: Active

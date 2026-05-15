@@ -1,6 +1,6 @@
 \# Events Contract
 
-\# shared-contracts\_\_events.md
+\# events.md
 
 
 
